@@ -19,11 +19,42 @@ struct MealPrepApp: App {
             catch { fatalError("Failed to create ModelContainer: \(error)") }
         }
         seedRecipesIfNeeded(in: container.mainContext)
+        Self.applyGlobalAppearance()
     }
 
     var body: some Scene {
         WindowGroup { ContentView() }
             .modelContainer(container)
+    }
+
+    private static func applyGlobalAppearance() {
+        // Tab bar — wood brown with wheat selected tint
+        let tabBar = UITabBarAppearance()
+        tabBar.configureWithOpaqueBackground()
+        tabBar.backgroundColor = UIColor(HungiTheme.woodBrown)
+        tabBar.stackedLayoutAppearance.normal.iconColor    = UIColor(HungiTheme.tan)
+        tabBar.stackedLayoutAppearance.normal.titleTextAttributes   = [.foregroundColor: UIColor(HungiTheme.tan)]
+        tabBar.stackedLayoutAppearance.selected.iconColor   = UIColor(HungiTheme.wheat)
+        tabBar.stackedLayoutAppearance.selected.titleTextAttributes = [.foregroundColor: UIColor(HungiTheme.wheat)]
+        UITabBar.appearance().standardAppearance  = tabBar
+        UITabBar.appearance().scrollEdgeAppearance = tabBar
+        UITabBar.appearance().tintColor = UIColor(HungiTheme.wheat)
+
+        // Navigation bar — wood brown with wheat title
+        let navBar = UINavigationBarAppearance()
+        navBar.configureWithOpaqueBackground()
+        navBar.backgroundColor = UIColor(HungiTheme.woodBrown)
+        navBar.titleTextAttributes      = [.foregroundColor: UIColor(HungiTheme.wheat),
+                                           .font: UIFont.systemFont(ofSize: 17, weight: .bold)]
+        navBar.largeTitleTextAttributes = [.foregroundColor: UIColor(HungiTheme.wheat),
+                                           .font: UIFont.systemFont(ofSize: 34, weight: .black)]
+        UINavigationBar.appearance().standardAppearance   = navBar
+        UINavigationBar.appearance().compactAppearance    = navBar
+        UINavigationBar.appearance().scrollEdgeAppearance = navBar
+        UINavigationBar.appearance().tintColor = UIColor(HungiTheme.wheat)
+
+        // List backgrounds — warm parchment
+        UITableView.appearance().backgroundColor = UIColor(HungiTheme.parchment)
     }
 
     private static func wipeStore() {

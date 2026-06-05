@@ -42,12 +42,13 @@ struct AddEditRecipeView: View {
                             Image(uiImage: img).resizable().scaledToFill()
                                 .frame(maxWidth: .infinity).frame(height: 200)
                                 .clipped().clipShape(RoundedRectangle(cornerRadius: 10))
+                                .overlay(RoundedRectangle(cornerRadius: 10).stroke(HungiTheme.darkBrown, lineWidth: 2))
                         } else {
                             HStack {
                                 Spacer()
                                 VStack(spacing: 8) {
-                                    Image(systemName: "camera.fill").font(.title2).foregroundStyle(.orange)
-                                    Text("Add Photo").font(.subheadline).foregroundStyle(.orange)
+                                    Image(systemName: "camera.fill").font(.title2).foregroundStyle(HungiTheme.harvest)
+                                    Text("Add Photo").font(HungiTheme.caption).foregroundStyle(HungiTheme.harvest)
                                 }
                                 Spacer()
                             }
@@ -67,6 +68,7 @@ struct AddEditRecipeView: View {
                 // Name
                 Section("Recipe Name") {
                     TextField("e.g. Chicken Stir Fry", text: $name)
+                        .font(HungiTheme.body)
                 }
 
                 // Type & time
@@ -76,36 +78,22 @@ struct AddEditRecipeView: View {
                             Label(MealType.displayName(for: t), systemImage: MealType.icon(for: t)).tag(t)
                         }
                     }
+                    .tint(HungiTheme.harvest)
                     HStack {
-                        Text("Cook Time")
+                        Text("Cook Time").font(HungiTheme.body).foregroundStyle(HungiTheme.darkBrown)
                         Spacer()
-                        TextField("0", text: $cookTime).keyboardType(.numberPad).multilineTextAlignment(.trailing).frame(width: 60)
-                        Text("min").foregroundStyle(.secondary)
+                        TextField("0", text: $cookTime).keyboardType(.numberPad)
+                            .multilineTextAlignment(.trailing).frame(width: 60)
+                        Text("min").font(HungiTheme.caption).foregroundStyle(HungiTheme.woodBrown)
                     }
                 }
 
                 // Macros
                 Section {
-                    HStack {
-                        Text("Calories").frame(width: 80, alignment: .leading)
-                        TextField("0", text: $calories).keyboardType(.numberPad).multilineTextAlignment(.trailing)
-                        Text("kcal").foregroundStyle(.secondary)
-                    }
-                    HStack {
-                        Text("Protein").frame(width: 80, alignment: .leading)
-                        TextField("0", text: $protein).keyboardType(.numberPad).multilineTextAlignment(.trailing)
-                        Text("g").foregroundStyle(.secondary)
-                    }
-                    HStack {
-                        Text("Carbs").frame(width: 80, alignment: .leading)
-                        TextField("0", text: $carbs).keyboardType(.numberPad).multilineTextAlignment(.trailing)
-                        Text("g").foregroundStyle(.secondary)
-                    }
-                    HStack {
-                        Text("Fat").frame(width: 80, alignment: .leading)
-                        TextField("0", text: $fat).keyboardType(.numberPad).multilineTextAlignment(.trailing)
-                        Text("g").foregroundStyle(.secondary)
-                    }
+                    macroRow(label: "Calories", binding: $calories, unit: "kcal")
+                    macroRow(label: "Protein",  binding: $protein,  unit: "g")
+                    macroRow(label: "Carbs",    binding: $carbs,    unit: "g")
+                    macroRow(label: "Fat",      binding: $fat,      unit: "g")
                 } header: { Text("Macros (optional)") }
 
                 // Ingredients
@@ -113,18 +101,23 @@ struct AddEditRecipeView: View {
                     ForEach(ingredients.indices, id: \.self) { i in
                         HStack {
                             Text(ingredients[i].name)
+                                .font(HungiTheme.body).foregroundStyle(HungiTheme.darkBrown)
                             Spacer()
-                            Text(ingredients[i].quantity).foregroundStyle(.secondary)
+                            Text(ingredients[i].quantity)
+                                .font(HungiTheme.caption).foregroundStyle(HungiTheme.woodBrown)
                         }
                     }
                     .onDelete { ingredients.remove(atOffsets: $0) }
 
                     HStack {
-                        TextField("Ingredient", text: $newIngName)
+                        TextField("Ingredient", text: $newIngName).font(HungiTheme.body)
                         Divider()
                         TextField("Qty", text: $newIngQty).frame(width: 60)
+                            .font(HungiTheme.caption)
                         Button(action: addIngredient) {
-                            Image(systemName: "plus.circle.fill").foregroundStyle(.blue)
+                            Image(systemName: "plus.circle.fill")
+                                .font(.title2)
+                                .foregroundStyle(newIngName.trimmingCharacters(in: .whitespaces).isEmpty ? HungiTheme.tan : HungiTheme.harvest)
                         }
                         .disabled(newIngName.trimmingCharacters(in: .whitespaces).isEmpty)
                     }
@@ -133,15 +126,35 @@ struct AddEditRecipeView: View {
                 // Instructions
                 Section("Instructions (optional)") {
                     TextEditor(text: $instructions).frame(minHeight: 100)
+                        .font(HungiTheme.body)
                 }
             }
+            .scrollContentBackground(.hidden)
+            .background(HungiTheme.parchment)
             .navigationTitle(isEditing ? "Edit Recipe" : "New Recipe")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
-                ToolbarItem(placement: .cancellationAction) { Button("Cancel") { dismiss() } }
-                ToolbarItem(placement: .confirmationAction) { Button("Save", action: save).disabled(!canSave) }
+                ToolbarItem(placement: .cancellationAction) {
+                    Button("Cancel") { dismiss() }
+                        .foregroundStyle(HungiTheme.woodBrown)
+                }
+                ToolbarItem(placement: .confirmationAction) {
+                    Button("Save", action: save)
+                        .disabled(!canSave)
+                        .foregroundStyle(canSave ? HungiTheme.harvest : HungiTheme.tan)
+                }
             }
             .onAppear(perform: loadExisting)
+        }
+    }
+
+    @ViewBuilder
+    private func macroRow(label: String, binding: Binding<String>, unit: String) -> some View {
+        HStack {
+            Text(label).frame(width: 80, alignment: .leading)
+                .font(HungiTheme.body).foregroundStyle(HungiTheme.darkBrown)
+            TextField("0", text: binding).keyboardType(.numberPad).multilineTextAlignment(.trailing)
+            Text(unit).font(HungiTheme.caption).foregroundStyle(HungiTheme.woodBrown)
         }
     }
 

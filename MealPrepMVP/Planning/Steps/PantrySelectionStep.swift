@@ -190,16 +190,18 @@ struct IngredientChip: View {
         Button(action: onTap) {
             HStack(spacing: 4) {
                 if isSelected { Image(systemName: "checkmark").font(.caption.bold()) }
-                Text(name).font(.subheadline)
+                Text(name).font(HungiTheme.caption)
             }
             .padding(.horizontal, 14)
             .padding(.vertical, 8)
-            .background(isSelected ? Color.orange : Color(.systemGray5))
-            .foregroundStyle(isSelected ? .white : .primary)
+            .background(isSelected ? HungiTheme.forest : HungiTheme.tan)
+            .foregroundStyle(isSelected ? HungiTheme.cream : HungiTheme.darkBrown)
             .clipShape(Capsule())
+            .overlay(Capsule().stroke(HungiTheme.darkBrown, lineWidth: isSelected ? 2 : 1))
+            .shadow(color: HungiTheme.darkBrown, radius: 0, x: isSelected ? 1 : 0, y: isSelected ? 1 : 0)
         }
         .buttonStyle(.plain)
-        .animation(.easeInOut(duration: 0.15), value: isSelected)
+        .animation(.easeInOut(duration: 0.12), value: isSelected)
     }
 }
 

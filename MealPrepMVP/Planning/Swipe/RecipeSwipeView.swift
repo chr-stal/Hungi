@@ -45,7 +45,7 @@ struct RecipeSwipeView: View {
     var body: some View {
         NavigationStack {
             ZStack {
-                Color(.systemGroupedBackground).ignoresSafeArea()
+                HungiTheme.parchment.ignoresSafeArea()
 
                 if isDone {
                     completionView
@@ -119,59 +119,46 @@ struct RecipeSwipeView: View {
         VStack(spacing: 6) {
             HStack {
                 Text("\(coordinator.plateCount) of \(coordinator.targetTotal) meals added")
-                    .font(.subheadline).foregroundStyle(.secondary)
+                    .font(HungiTheme.caption).foregroundStyle(HungiTheme.woodBrown)
                 Spacer()
                 Text("\(rankedMatches.count - currentIndex) left")
-                    .font(.subheadline).foregroundStyle(.secondary)
+                    .font(HungiTheme.caption).foregroundStyle(HungiTheme.woodBrown)
             }
-            ProgressView(value: Double(coordinator.plateCount), total: Double(coordinator.targetTotal))
-                .tint(.orange)
+            PixelProgressBar(
+                value: Double(coordinator.plateCount) / Double(max(coordinator.targetTotal, 1)),
+                tint: HungiTheme.forest
+            )
         }
         .padding(.horizontal, 4)
     }
 
     private var actionButtons: some View {
-        HStack(spacing: 50) {
-            // Decline
+        HStack(spacing: 36) {
+            // Decline — terracotta circle
             Button {
-                if currentIndex < rankedMatches.count {
-                    decline(rankedMatches[currentIndex])
-                }
+                if currentIndex < rankedMatches.count { decline(rankedMatches[currentIndex]) }
             } label: {
                 Image(systemName: "xmark")
-                    .font(.title.bold())
-                    .foregroundStyle(.red)
-                    .frame(width: 64, height: 64)
-                    .background(Color(.systemBackground))
-                    .clipShape(Circle())
-                    .shadow(color: .red.opacity(0.3), radius: 6)
+                    .font(.title2.bold())
+                    .foregroundStyle(HungiTheme.cream)
             }
+            .buttonStyle(PixelCircleButtonStyle(background: HungiTheme.terracotta))
 
-            // Done button
+            // Done
             Button { coordinator.step = .summary } label: {
-                Text("Done")
-                    .font(.subheadline.bold())
-                    .foregroundStyle(.white)
-                    .padding(.horizontal, 20)
-                    .padding(.vertical, 12)
-                    .background(Color.orange)
-                    .clipShape(Capsule())
+                Text("Done →")
             }
+            .buttonStyle(PixelButtonStyle(background: HungiTheme.wheat, foreground: HungiTheme.darkBrown))
 
-            // Accept
+            // Accept — forest green circle
             Button {
-                if currentIndex < rankedMatches.count {
-                    acceptAndAdvance(rankedMatches[currentIndex])
-                }
+                if currentIndex < rankedMatches.count { acceptAndAdvance(rankedMatches[currentIndex]) }
             } label: {
                 Image(systemName: "checkmark")
-                    .font(.title.bold())
-                    .foregroundStyle(.green)
-                    .frame(width: 64, height: 64)
-                    .background(Color(.systemBackground))
-                    .clipShape(Circle())
-                    .shadow(color: .green.opacity(0.3), radius: 6)
+                    .font(.title2.bold())
+                    .foregroundStyle(HungiTheme.cream)
             }
+            .buttonStyle(PixelCircleButtonStyle(background: HungiTheme.forest))
         }
         .padding(.bottom, 32)
     }

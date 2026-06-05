@@ -9,111 +9,98 @@ struct RecipeCardView: View {
     private var isDeclining: Bool { dragOffset.width < -20 }
 
     var body: some View {
-        ZStack(alignment: .bottom) {
-            // Background image or placeholder
-            if let data = match.recipe.imageData, let img = UIImage(data: data) {
-                Image(uiImage: img)
-                    .resizable()
-                    .scaledToFill()
-            } else {
-                ZStack {
-                    LinearGradient(
-                        colors: [MealType.color(for: match.recipe.mealType).opacity(0.6), Color(.systemGray4)],
-                        startPoint: .topLeading, endPoint: .bottomTrailing
-                    )
-                    Image(systemName: "fork.knife")
-                        .font(.system(size: 60))
-                        .foregroundStyle(.white.opacity(0.4))
-                }
-            }
+        VStack(spacing: 0) {
+            // Image area
+            ZStack(alignment: .topLeading) {
+                imageBackground
+                    .frame(height: 300)
+                    .clipped()
 
-            // Bottom info overlay
-            VStack(alignment: .leading, spacing: 8) {
+                // Top badges
                 HStack {
-                    // Meal type badge
-                    Label(MealType.displayName(for: match.recipe.mealType),
-                          systemImage: MealType.icon(for: match.recipe.mealType))
-                        .font(.caption.bold())
-                        .padding(.horizontal, 10)
-                        .padding(.vertical, 5)
-                        .background(MealType.color(for: match.recipe.mealType))
-                        .foregroundStyle(.white)
-                        .clipShape(Capsule())
-
+                    PixelBadge(
+                        text: MealType.displayName(for: match.recipe.mealType),
+                        background: MealType.color(for: match.recipe.mealType),
+                        foreground: .white
+                    )
                     Spacer()
-
-                    // Cook time
                     if match.recipe.cookTime > 0 {
-                        Label(match.recipe.cookTimeDisplay, systemImage: "clock")
-                            .font(.caption.bold())
-                            .padding(.horizontal, 10)
-                            .padding(.vertical, 5)
-                            .background(.ultraThinMaterial)
-                            .clipShape(Capsule())
+                        PixelBadge(
+                            text: "⏱ \(match.recipe.cookTimeDisplay)",
+                            background: HungiTheme.darkBrown,
+                            foreground: HungiTheme.wheat
+                        )
                     }
                 }
+                .padding(12)
 
+                // Swipe stamp overlay
+                if isAccepting || isDeclining {
+                    stampOverlay.opacity(swipeOpacity)
+                }
+            }
+
+            // Parchment info panel
+            VStack(alignment: .leading, spacing: 8) {
                 Text(match.recipe.name)
-                    .font(.title.bold())
-                    .foregroundStyle(.white)
-                    .shadow(radius: 2)
+                    .font(HungiTheme.title2)
+                    .foregroundStyle(HungiTheme.darkBrown)
 
-                // Match bar
                 HStack(spacing: 8) {
-                    ProgressView(value: match.score)
-                        .progressViewStyle(.linear)
-                        .tint(matchColor)
+                    PixelProgressBar(value: match.score, tint: matchColor)
                         .frame(maxWidth: 120)
                     Text("\(match.matchPercentage)% match")
-                        .font(.subheadline.bold())
-                        .foregroundStyle(.white)
+                        .font(HungiTheme.caption)
+                        .foregroundStyle(matchColor)
                 }
             }
-            .padding(20)
-            .background(
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding(14)
+            .background(HungiTheme.cream)
+        }
+        .clipShape(RoundedRectangle(cornerRadius: HungiTheme.cardRadius))
+        .overlay(
+            RoundedRectangle(cornerRadius: HungiTheme.cardRadius)
+                .stroke(HungiTheme.darkBrown, lineWidth: HungiTheme.borderWidth)
+        )
+        .shadow(
+            color: HungiTheme.darkBrown,
+            radius: 0,
+            x: HungiTheme.shadowX,
+            y: HungiTheme.shadowY
+        )
+    }
+
+    @ViewBuilder
+    private var imageBackground: some View {
+        if let data = match.recipe.imageData, let img = UIImage(data: data) {
+            Image(uiImage: img).resizable().scaledToFill()
+        } else {
+            ZStack {
                 LinearGradient(
-                    colors: [.clear, .black.opacity(0.75)],
-                    startPoint: .top, endPoint: .bottom
+                    colors: [MealType.color(for: match.recipe.mealType).opacity(0.7),
+                             HungiTheme.tan],
+                    startPoint: .topLeading, endPoint: .bottomTrailing
                 )
-            )
-
-            // Swipe direction overlays
-            if isAccepting {
-                acceptOverlay.opacity(swipeOpacity)
-            } else if isDeclining {
-                declineOverlay.opacity(swipeOpacity)
-            }
-        }
-        .clipShape(RoundedRectangle(cornerRadius: 20))
-        .shadow(color: .black.opacity(0.2), radius: 8, x: 0, y: 4)
-    }
-
-    private var acceptOverlay: some View {
-        ZStack {
-            RoundedRectangle(cornerRadius: 20).fill(Color.green.opacity(0.35))
-            VStack {
-                HStack {
-                    Image(systemName: "checkmark.circle.fill")
-                        .font(.system(size: 60))
-                        .foregroundStyle(.green)
-                        .padding(24)
-                    Spacer()
-                }
-                Spacer()
+                Image(systemName: "fork.knife")
+                    .font(.system(size: 64))
+                    .foregroundStyle(HungiTheme.cream.opacity(0.5))
             }
         }
     }
 
-    private var declineOverlay: some View {
+    private var stampOverlay: some View {
         ZStack {
-            RoundedRectangle(cornerRadius: 20).fill(Color.red.opacity(0.35))
+            (isAccepting ? HungiTheme.forest : HungiTheme.terracotta).opacity(0.25)
             VStack {
                 HStack {
-                    Spacer()
-                    Image(systemName: "xmark.circle.fill")
-                        .font(.system(size: 60))
-                        .foregroundStyle(.red)
-                        .padding(24)
+                    if isAccepting {
+                        SwipeStamp(accept: true).padding(16)
+                        Spacer()
+                    } else {
+                        Spacer()
+                        SwipeStamp(accept: false).padding(16)
+                    }
                 }
                 Spacer()
             }
@@ -122,9 +109,9 @@ struct RecipeCardView: View {
 
     private var matchColor: Color {
         switch match.score {
-        case 0.8...: return .green
-        case 0.5..<0.8: return .orange
-        default: return .red
+        case 0.8...: return HungiTheme.forest
+        case 0.5..<0.8: return HungiTheme.harvest
+        default: return HungiTheme.terracotta
         }
     }
 }

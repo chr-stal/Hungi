@@ -21,9 +21,11 @@ struct GroceryListView: View {
                     HStack(spacing: 8) {
                         TextField("Item name...", text: $newItemName)
                             .submitLabel(.done).onSubmit(addItem)
+                            .font(HungiTheme.body)
                         TextField("Qty", text: $newItemQuantity)
                             .frame(width: 40).multilineTextAlignment(.center)
                             .keyboardType(.decimalPad)
+                            .font(HungiTheme.caption)
                         Picker("", selection: $newItemUnit) {
                             ForEach(ItemUnit.options, id: \.self) { u in
                                 Text(u.isEmpty ? "unit" : u).tag(u)
@@ -32,7 +34,8 @@ struct GroceryListView: View {
                         .labelsHidden().frame(width: 72)
                         Button(action: addItem) {
                             Image(systemName: "plus.circle.fill")
-                                .foregroundStyle(newItemName.trimmingCharacters(in: .whitespaces).isEmpty ? .gray : .blue)
+                                .font(.title2)
+                                .foregroundStyle(newItemName.trimmingCharacters(in: .whitespaces).isEmpty ? HungiTheme.tan : HungiTheme.harvest)
                         }
                         .disabled(newItemName.trimmingCharacters(in: .whitespaces).isEmpty)
                     }
@@ -41,18 +44,15 @@ struct GroceryListView: View {
                 if !unchecked.isEmpty {
                     Section("Need to buy (\(unchecked.count))") {
                         ForEach(unchecked) { item in
-                            GroceryRow(
-                                item: item,
-                                onSendToPantry: { sendToPantry(item) }
-                            )
-                            .swipeActions(edge: .leading) {
-                                Button {
-                                    sendToPantry(item)
-                                } label: {
-                                    Label("Add to Pantry", systemImage: "tray.and.arrow.down.fill")
+                            GroceryRow(item: item, onSendToPantry: { sendToPantry(item) })
+                                .swipeActions(edge: .leading) {
+                                    Button {
+                                        sendToPantry(item)
+                                    } label: {
+                                        Label("Add to Pantry", systemImage: "tray.and.arrow.down.fill")
+                                    }
+                                    .tint(HungiTheme.harvest)
                                 }
-                                .tint(.orange)
-                            }
                         }
                         .onDelete { deleteFrom(unchecked, at: $0) }
                     }
@@ -61,18 +61,15 @@ struct GroceryListView: View {
                 if !checked.isEmpty {
                     Section("In cart / have it") {
                         ForEach(checked) { item in
-                            GroceryRow(
-                                item: item,
-                                onSendToPantry: { sendToPantry(item) }
-                            )
-                            .swipeActions(edge: .leading) {
-                                Button {
-                                    sendToPantry(item)
-                                } label: {
-                                    Label("Add to Pantry", systemImage: "tray.and.arrow.down.fill")
+                            GroceryRow(item: item, onSendToPantry: { sendToPantry(item) })
+                                .swipeActions(edge: .leading) {
+                                    Button {
+                                        sendToPantry(item)
+                                    } label: {
+                                        Label("Add to Pantry", systemImage: "tray.and.arrow.down.fill")
+                                    }
+                                    .tint(HungiTheme.harvest)
                                 }
-                                .tint(.orange)
-                            }
                         }
                         .onDelete { deleteFrom(checked, at: $0) }
                     }
@@ -86,12 +83,14 @@ struct GroceryListView: View {
                     )
                 }
             }
+            .scrollContentBackground(.hidden)
+            .background(HungiTheme.parchment)
             .navigationTitle("Grocery List")
             .toolbar {
                 if !checked.isEmpty {
                     ToolbarItem(placement: .navigationBarTrailing) {
                         Button("Clear checked") { checked.forEach { modelContext.delete($0) } }
-                            .foregroundStyle(.red)
+                            .foregroundStyle(HungiTheme.terracotta)
                     }
                 }
             }
@@ -111,7 +110,6 @@ struct GroceryListView: View {
         for i in offsets { modelContext.delete(source[i]) }
     }
 
-    /// Move item from grocery list to pantry, then remove from grocery list.
     private func sendToPantry(_ item: GroceryItem) {
         let existingNames = Set(pantryItems.map { $0.name.lowercased() })
         if !existingNames.contains(item.name.lowercased()) {
@@ -134,18 +132,21 @@ struct GroceryRow: View {
             } label: {
                 Image(systemName: item.isChecked ? "checkmark.circle.fill" : "circle")
                     .font(.title3)
-                    .foregroundStyle(item.isChecked ? .green : .secondary)
+                    .foregroundStyle(item.isChecked ? HungiTheme.forest : HungiTheme.woodBrown)
             }
             .buttonStyle(.plain)
 
             Text(item.name)
+                .font(HungiTheme.body)
                 .strikethrough(item.isChecked)
-                .foregroundStyle(item.isChecked ? .secondary : .primary)
+                .foregroundStyle(item.isChecked ? HungiTheme.woodBrown : HungiTheme.darkBrown)
 
             Spacer()
 
             if !item.displayQuantity.isEmpty {
-                Text(item.displayQuantity).font(.subheadline).foregroundStyle(.secondary)
+                Text(item.displayQuantity)
+                    .font(HungiTheme.caption)
+                    .foregroundStyle(HungiTheme.woodBrown)
             }
         }
     }

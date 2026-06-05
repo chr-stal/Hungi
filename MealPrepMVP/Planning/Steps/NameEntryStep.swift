@@ -8,44 +8,61 @@ struct NameEntryStep: View {
     @State private var name = ""
 
     var body: some View {
-        VStack(spacing: 40) {
-            Spacer()
+        ZStack {
+            HungiTheme.parchment.ignoresSafeArea()
 
-            Image(systemName: "fork.knife.circle.fill")
-                .font(.system(size: 80))
-                .foregroundStyle(.orange)
+            VStack(spacing: 40) {
+                Spacer()
 
-            VStack(spacing: 12) {
-                Text("Welcome to MealPrep!")
-                    .font(.largeTitle.bold())
-                Text("What's your name?")
-                    .font(.title3)
-                    .foregroundStyle(.secondary)
+                VStack(spacing: 16) {
+                    Text("🌾")
+                        .font(.system(size: 80))
+
+                    Text("Welcome to\nHungi!")
+                        .font(HungiTheme.largeTitle)
+                        .foregroundStyle(HungiTheme.darkBrown)
+                        .multilineTextAlignment(.center)
+
+                    Text("Your weekly meal planner")
+                        .font(HungiTheme.body)
+                        .foregroundStyle(HungiTheme.woodBrown)
+                }
+
+                // Name field in parchment card
+                VStack(alignment: .leading, spacing: 10) {
+                    Text("What's your name?")
+                        .font(HungiTheme.headline)
+                        .foregroundStyle(HungiTheme.darkBrown)
+
+                    TextField("e.g. Victoria", text: $name)
+                        .font(HungiTheme.title2)
+                        .multilineTextAlignment(.center)
+                        .padding(14)
+                        .background(HungiTheme.cream)
+                        .clipShape(RoundedRectangle(cornerRadius: HungiTheme.buttonRadius))
+                        .overlay(RoundedRectangle(cornerRadius: HungiTheme.buttonRadius)
+                            .stroke(HungiTheme.darkBrown, lineWidth: 2.5))
+                        .shadow(color: HungiTheme.darkBrown, radius: 0, x: 2, y: 3)
+                        .submitLabel(.done)
+                        .onSubmit(save)
+                }
+                .padding(20)
+                .background(HungiTheme.tan.opacity(0.4))
+                .clipShape(RoundedRectangle(cornerRadius: HungiTheme.cardRadius))
+                .pixelBorder(color: HungiTheme.woodBrown)
+                .padding(.horizontal, 28)
+
+                Spacer()
+
+                Button(action: save) {
+                    Text("Let's Plan! 🍽")
+                        .frame(maxWidth: .infinity)
+                }
+                .buttonStyle(PixelButtonStyle(background: name.trimmingCharacters(in: .whitespaces).isEmpty ? HungiTheme.tan : HungiTheme.harvest))
+                .disabled(name.trimmingCharacters(in: .whitespaces).isEmpty)
+                .padding(.horizontal, 28)
+                .padding(.bottom, 48)
             }
-
-            TextField("Your name", text: $name)
-                .font(.title2)
-                .multilineTextAlignment(.center)
-                .padding()
-                .background(.quaternary, in: RoundedRectangle(cornerRadius: 14))
-                .padding(.horizontal, 32)
-                .submitLabel(.done)
-                .onSubmit { save() }
-
-            Spacer()
-
-            Button(action: save) {
-                Text("Continue")
-                    .font(.headline)
-                    .frame(maxWidth: .infinity)
-                    .padding()
-                    .background(name.trimmingCharacters(in: .whitespaces).isEmpty ? Color.gray : Color.orange)
-                    .foregroundStyle(.white)
-                    .clipShape(RoundedRectangle(cornerRadius: 14))
-            }
-            .disabled(name.trimmingCharacters(in: .whitespaces).isEmpty)
-            .padding(.horizontal, 24)
-            .padding(.bottom, 40)
         }
     }
 

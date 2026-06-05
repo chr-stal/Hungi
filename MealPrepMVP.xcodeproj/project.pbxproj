@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		06ACFCDFFD66CBE8D7427ADD /* GroceryListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A1784EC8782427FD23BE903 /* GroceryListView.swift */; };
 		08EE31E55CF21CF505AC6746 /* NameEntryStep.swift in Sources */ = {isa = PBXBuildFile; fileRef = F719878335BBE2F7D61C7A3F /* NameEntryStep.swift */; };
+		14BF2122370F1924276FF745 /* PixelComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4BC7E5CF106451C0823E591 /* PixelComponents.swift */; };
 		18A54C0E81C84B253767ECED /* WeeklyPlan.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E287A89B1E6DE3B6975A077 /* WeeklyPlan.swift */; };
 		3BFAA7E46A9AA558A33C9F30 /* MealType.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3248478938B75A248934688 /* MealType.swift */; };
 		3DC04ABED130E8DA0A8260FE /* RecipeIngredient.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEDE55EA54743320BAEFBD96 /* RecipeIngredient.swift */; };
@@ -19,6 +20,7 @@
 		5547284B1B3BC4A69B260E0B /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4ABA5A46897C85C387290658 /* ContentView.swift */; };
 		5A2C318F5F62D145723CC774 /* RecipeSwipeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0B939E14EE512940D1CC6E1 /* RecipeSwipeView.swift */; };
 		73E0026BA0E4F5C5E29DE4A5 /* RecipeCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42C494FD532C0444E9A754B9 /* RecipeCardView.swift */; };
+		7AA04680203F82C0D4E1D12D /* HungiTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D73F59D283AC2FB068BC155 /* HungiTheme.swift */; };
 		84DFC8C90644EFD1ED219539 /* Recipe.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47ACD408D86EFC1DB29046CC /* Recipe.swift */; };
 		A2FD06E25A8514EA938C9DED /* PantryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D53006047424F5BAB35F76E /* PantryView.swift */; };
 		AA447415EEB3064603F90884 /* GroceryItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AAC67E14D0FBF5EAFCA12C8 /* GroceryItem.swift */; };
@@ -39,7 +41,7 @@
 		09CCABC808EA3E733B31092A /* FlowCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlowCoordinator.swift; sourceTree = "<group>"; };
 		10CAF01D8F602070A706C06A /* AddEditRecipeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddEditRecipeView.swift; sourceTree = "<group>"; };
 		1D53006047424F5BAB35F76E /* PantryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PantryView.swift; sourceTree = "<group>"; };
-		225E2CDC9E7F514140757080 /* MealPrepMVP.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = MealPrepMVP.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		225E2CDC9E7F514140757080 /* MealPrepMVP.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MealPrepMVP.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2631A4AAEBBE11CB9FB893A5 /* MealPrepApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MealPrepApp.swift; sourceTree = "<group>"; };
 		2A1784EC8782427FD23BE903 /* GroceryListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroceryListView.swift; sourceTree = "<group>"; };
 		32115BF6745DFE4787E5DF68 /* WeeklySummaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeeklySummaryView.swift; sourceTree = "<group>"; };
@@ -51,6 +53,7 @@
 		4E287A89B1E6DE3B6975A077 /* WeeklyPlan.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeeklyPlan.swift; sourceTree = "<group>"; };
 		560FBBE91F7CF62B9875DF4E /* RecipeDetailCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeDetailCardView.swift; sourceTree = "<group>"; };
 		6AAC67E14D0FBF5EAFCA12C8 /* GroceryItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroceryItem.swift; sourceTree = "<group>"; };
+		6D73F59D283AC2FB068BC155 /* HungiTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HungiTheme.swift; sourceTree = "<group>"; };
 		72D3E72799A3A1C161DAA0DF /* GroceryDiffService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroceryDiffService.swift; sourceTree = "<group>"; };
 		7FAF7A14D68C4659FD009CF7 /* MatchingService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchingService.swift; sourceTree = "<group>"; };
 		85516C4D8A77F4D4C1180962 /* MealCountStep.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MealCountStep.swift; sourceTree = "<group>"; };
@@ -60,6 +63,7 @@
 		D0B939E14EE512940D1CC6E1 /* RecipeSwipeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeSwipeView.swift; sourceTree = "<group>"; };
 		D3248478938B75A248934688 /* MealType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MealType.swift; sourceTree = "<group>"; };
 		D3F9758A763ABDA4CD60CDB0 /* RecipeDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeDetailView.swift; sourceTree = "<group>"; };
+		E4BC7E5CF106451C0823E591 /* PixelComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PixelComponents.swift; sourceTree = "<group>"; };
 		E72FF2C006038EAA7B96180C /* WeeklyOverviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeeklyOverviewView.swift; sourceTree = "<group>"; };
 		EFDC8742D40B272A688B3AE8 /* RecipeListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeListView.swift; sourceTree = "<group>"; };
 		F719878335BBE2F7D61C7A3F /* NameEntryStep.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NameEntryStep.swift; sourceTree = "<group>"; };
@@ -103,6 +107,15 @@
 				1D53006047424F5BAB35F76E /* PantryView.swift */,
 			);
 			path = Pantry;
+			sourceTree = "<group>";
+		};
+		2369D39734B81EADA4DE6E94 /* Theme */ = {
+			isa = PBXGroup;
+			children = (
+				6D73F59D283AC2FB068BC155 /* HungiTheme.swift */,
+				E4BC7E5CF106451C0823E591 /* PixelComponents.swift */,
+			);
+			path = Theme;
 			sourceTree = "<group>";
 		};
 		43E4E415BB47E5E395B15F60 /* Recipes */ = {
@@ -200,6 +213,7 @@
 				92123C071281A261EE74F3EB /* Grocery */,
 				1FA41969EA17818BF5C6988B /* Pantry */,
 				43E4E415BB47E5E395B15F60 /* Recipes */,
+				2369D39734B81EADA4DE6E94 /* Theme */,
 				BAE74CB1ECA1F695E4CA1C24 /* WeeklyOverview */,
 			);
 			path = Views;
@@ -235,7 +249,6 @@
 				LastUpgradeCheck = 1500;
 				TargetAttributes = {
 					BE8A4244C3D6C57DCC73F477 = {
-						DevelopmentTeam = "";
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -270,6 +283,7 @@
 				53503828DAEAC536C8451A6B /* GroceryDiffService.swift in Sources */,
 				AA447415EEB3064603F90884 /* GroceryItem.swift in Sources */,
 				06ACFCDFFD66CBE8D7427ADD /* GroceryListView.swift in Sources */,
+				7AA04680203F82C0D4E1D12D /* HungiTheme.swift in Sources */,
 				5440BE012C2BD5AA6037A1F2 /* MatchingService.swift in Sources */,
 				E19D97279597B7047BCBF57C /* MealCountStep.swift in Sources */,
 				C3142B6FDF1161A7A41CAB8E /* MealPrepApp.swift in Sources */,
@@ -278,6 +292,7 @@
 				AE817F7DE7D900855425CE4F /* PantryItem.swift in Sources */,
 				B6F7D1C7C724E1DBB573A526 /* PantrySelectionStep.swift in Sources */,
 				A2FD06E25A8514EA938C9DED /* PantryView.swift in Sources */,
+				14BF2122370F1924276FF745 /* PixelComponents.swift in Sources */,
 				84DFC8C90644EFD1ED219539 /* Recipe.swift in Sources */,
 				73E0026BA0E4F5C5E29DE4A5 /* RecipeCardView.swift in Sources */,
 				3FACDD1E0D3D6E13E948CD57 /* RecipeDetailCardView.swift in Sources */,
@@ -302,7 +317,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = MR36XC8595;
 				INFOPLIST_FILE = MealPrepMVP/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -379,7 +394,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = MR36XC8595;
 				INFOPLIST_FILE = MealPrepMVP/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (

@@ -10,11 +10,14 @@ struct RecipeListView: View {
         NavigationStack {
             Group {
                 if recipes.isEmpty {
-                    ContentUnavailableView(
-                        "No recipes yet",
-                        systemImage: "book",
-                        description: Text("Tap + to add your first recipe.")
-                    )
+                    ZStack {
+                        HungiTheme.parchment.ignoresSafeArea()
+                        ContentUnavailableView(
+                            "No recipes yet",
+                            systemImage: "book",
+                            description: Text("Tap + to add your first recipe.")
+                        )
+                    }
                 } else {
                     List {
                         ForEach(recipes) { recipe in
@@ -24,16 +27,21 @@ struct RecipeListView: View {
                         }
                         .onDelete(perform: deleteRecipes)
                     }
+                    .scrollContentBackground(.hidden)
+                    .background(HungiTheme.parchment)
                 }
             }
             .navigationTitle("Recipes")
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
-                    if !recipes.isEmpty { EditButton() }
+                    if !recipes.isEmpty {
+                        EditButton().foregroundStyle(HungiTheme.woodBrown)
+                    }
                 }
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button { showingAddRecipe = true } label: {
                         Image(systemName: "plus")
+                            .foregroundStyle(HungiTheme.harvest)
                     }
                 }
             }
@@ -55,7 +63,6 @@ struct RecipeRow: View {
 
     var body: some View {
         HStack(spacing: 12) {
-            // Thumbnail
             if let imageData = recipe.imageData, let uiImage = UIImage(data: imageData) {
                 Image(uiImage: uiImage)
                     .resizable()
@@ -63,21 +70,25 @@ struct RecipeRow: View {
                     .frame(width: 56, height: 56)
                     .clipped()
                     .clipShape(RoundedRectangle(cornerRadius: 8))
+                    .overlay(RoundedRectangle(cornerRadius: 8).stroke(HungiTheme.darkBrown, lineWidth: 1.5))
             } else {
                 RoundedRectangle(cornerRadius: 8)
-                    .fill(Color(.systemGray5))
+                    .fill(HungiTheme.tan)
                     .frame(width: 56, height: 56)
+                    .overlay(RoundedRectangle(cornerRadius: 8).stroke(HungiTheme.darkBrown, lineWidth: 1.5))
                     .overlay {
                         Image(systemName: "fork.knife")
-                            .foregroundStyle(.secondary)
+                            .foregroundStyle(HungiTheme.woodBrown)
                     }
             }
 
             VStack(alignment: .leading, spacing: 2) {
-                Text(recipe.name).font(.headline)
+                Text(recipe.name)
+                    .font(HungiTheme.headline)
+                    .foregroundStyle(HungiTheme.darkBrown)
                 Text("\(recipe.ingredients.count) ingredient\(recipe.ingredients.count == 1 ? "" : "s")")
-                    .font(.subheadline)
-                    .foregroundStyle(.secondary)
+                    .font(HungiTheme.caption)
+                    .foregroundStyle(HungiTheme.woodBrown)
             }
         }
         .padding(.vertical, 4)

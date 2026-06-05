@@ -24,11 +24,13 @@ struct PantryView: View {
                         TextField("Ingredient...", text: $newItemName)
                             .submitLabel(.done)
                             .onSubmit(addItem)
+                            .font(HungiTheme.body)
 
                         TextField("Qty", text: $newItemQuantity)
                             .frame(width: 40)
                             .multilineTextAlignment(.center)
                             .keyboardType(.decimalPad)
+                            .font(HungiTheme.caption)
 
                         Picker("", selection: $newItemUnit) {
                             ForEach(ItemUnit.options, id: \.self) { unit in
@@ -40,14 +42,17 @@ struct PantryView: View {
 
                         Button(action: addItem) {
                             Image(systemName: "plus.circle.fill")
-                                .foregroundStyle(newItemName.trimmingCharacters(in: .whitespaces).isEmpty ? .gray : .orange)
+                                .font(.title2)
+                                .foregroundStyle(newItemName.trimmingCharacters(in: .whitespaces).isEmpty ? HungiTheme.tan : HungiTheme.harvest)
                         }
                         .disabled(newItemName.trimmingCharacters(in: .whitespaces).isEmpty)
                     }
                 }
 
                 if filteredItems.isEmpty && !pantryItems.isEmpty {
-                    Text("No results for \"\(searchText)\"").foregroundStyle(.secondary)
+                    Text("No results for \"\(searchText)\"")
+                        .font(HungiTheme.body)
+                        .foregroundStyle(HungiTheme.woodBrown)
                 } else if pantryItems.isEmpty {
                     ContentUnavailableView(
                         "Pantry is empty",
@@ -63,19 +68,21 @@ struct PantryView: View {
                     }
                 }
             }
+            .scrollContentBackground(.hidden)
+            .background(HungiTheme.parchment)
             .navigationTitle("My Pantry")
             .searchable(text: $searchText, prompt: "Search pantry")
             .toolbar {
                 if !filteredItems.isEmpty {
                     ToolbarItem(placement: .navigationBarLeading) {
-                        EditButton()
+                        EditButton().foregroundStyle(HungiTheme.woodBrown)
                     }
                 }
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button("Clear all") {
                         pantryItems.forEach { modelContext.delete($0) }
                     }
-                    .foregroundStyle(.red)
+                    .foregroundStyle(HungiTheme.terracotta)
                     .disabled(pantryItems.isEmpty)
                 }
             }
@@ -108,11 +115,13 @@ struct PantryRow: View {
     var body: some View {
         HStack {
             Text(item.name)
+                .font(HungiTheme.body)
+                .foregroundStyle(HungiTheme.darkBrown)
             Spacer()
             if !item.displayQuantity.isEmpty {
                 Text(item.displayQuantity)
-                    .font(.subheadline)
-                    .foregroundStyle(.secondary)
+                    .font(HungiTheme.caption)
+                    .foregroundStyle(HungiTheme.woodBrown)
             }
         }
     }

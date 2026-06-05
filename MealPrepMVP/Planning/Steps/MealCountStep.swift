@@ -6,117 +6,73 @@ struct MealCountStep: View {
     var body: some View {
         @Bindable var coord = coordinator
 
-        NavigationStack {
-            VStack(spacing: 40) {
+        ZStack {
+            HungiTheme.parchment.ignoresSafeArea()
+
+            VStack(spacing: 32) {
                 Spacer()
 
-                VStack(spacing: 8) {
-                    Image(systemName: "calendar.badge.plus")
+                VStack(spacing: 10) {
+                    Text("🗓️")
                         .font(.system(size: 56))
-                        .foregroundStyle(.orange)
-                    Text("How many meals\nwould you like to make?")
-                        .font(.title2.bold())
+                    Text("How many meals\nthis week?")
+                        .font(HungiTheme.title)
+                        .foregroundStyle(HungiTheme.darkBrown)
                         .multilineTextAlignment(.center)
                 }
 
+                // Stepper card
                 VStack(spacing: 0) {
-                    MealCountRow(
+                    PixelStepperRow(
                         label: "Breakfast",
                         icon: MealType.icon(for: MealType.breakfast),
                         color: MealType.color(for: MealType.breakfast),
                         count: $coord.targetBreakfast
                     )
-                    Divider().padding(.leading, 56)
-                    MealCountRow(
+                    Divider().background(HungiTheme.tan).padding(.leading, 56)
+                    PixelStepperRow(
                         label: "Lunch",
                         icon: MealType.icon(for: MealType.lunch),
                         color: MealType.color(for: MealType.lunch),
                         count: $coord.targetLunch
                     )
-                    Divider().padding(.leading, 56)
-                    MealCountRow(
+                    Divider().background(HungiTheme.tan).padding(.leading, 56)
+                    PixelStepperRow(
                         label: "Dinner",
                         icon: MealType.icon(for: MealType.dinner),
                         color: MealType.color(for: MealType.dinner),
                         count: $coord.targetDinner
                     )
                 }
-                .background(.quaternary, in: RoundedRectangle(cornerRadius: 16))
+                .background(HungiTheme.cream)
+                .clipShape(RoundedRectangle(cornerRadius: HungiTheme.cardRadius))
+                .pixelBorder()
+                .pixelShadow()
                 .padding(.horizontal, 24)
 
-                Text("Total: \(coordinator.targetTotal) meals this week")
-                    .font(.subheadline)
-                    .foregroundStyle(.secondary)
+                Text("Total: \(coordinator.targetTotal) meals")
+                    .font(HungiTheme.body)
+                    .foregroundStyle(HungiTheme.woodBrown)
 
                 Spacer()
 
                 Button(action: { coordinator.step = .swiping }) {
-                    Text("Start Swiping →")
-                        .font(.headline)
+                    Text("Start Swiping 🃏")
                         .frame(maxWidth: .infinity)
-                        .padding()
-                        .background(.orange)
-                        .foregroundStyle(.white)
-                        .clipShape(RoundedRectangle(cornerRadius: 14))
                 }
-                .padding(.horizontal, 24)
-                .padding(.bottom, 40)
-            }
-            .navigationTitle("Meal Plan")
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .navigationBarLeading) {
-                    Button("Back") { coordinator.step = .pantry }
-                        .foregroundStyle(.orange)
-                }
+                .buttonStyle(PixelButtonStyle(background: HungiTheme.harvest))
+                .padding(.horizontal, 28)
+                .padding(.bottom, 48)
             }
         }
-    }
-}
-
-// MARK: - Stepper row
-
-private struct MealCountRow: View {
-    let label: String
-    let icon: String
-    let color: Color
-    @Binding var count: Int
-
-    var body: some View {
-        HStack {
-            Image(systemName: icon)
-                .foregroundStyle(color)
-                .frame(width: 32)
-                .padding(.leading, 16)
-
-            Text(label)
-                .font(.body)
-
-            Spacer()
-
-            HStack(spacing: 16) {
-                Button {
-                    if count > 0 { count -= 1 }
-                } label: {
-                    Image(systemName: "minus.circle.fill")
-                        .font(.title2)
-                        .foregroundStyle(count > 0 ? color : .gray)
-                }
-
-                Text("\(count)")
-                    .font(.title3.bold())
-                    .frame(width: 28, alignment: .center)
-
-                Button {
-                    count += 1
-                } label: {
-                    Image(systemName: "plus.circle.fill")
-                        .font(.title2)
-                        .foregroundStyle(color)
-                }
+        .navigationTitle("Meal Plan")
+        .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            ToolbarItem(placement: .navigationBarLeading) {
+                Button("← Back") { coordinator.step = .pantry }
+                    .font(HungiTheme.caption)
+                    .foregroundStyle(HungiTheme.wheat)
             }
-            .padding(.trailing, 16)
-            .padding(.vertical, 14)
         }
     }
 }
