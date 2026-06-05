@@ -5,45 +5,55 @@ import Observation
 final class FlowCoordinator {
 
     enum Step {
-        case name           // First-ever launch — enter name
-        case pantry         // Select what's in fridge/pantry
-        case mealCount      // Set B/L/D targets
+        case name           // First-ever launch: name entry
+        case ingredients    // "What do you want to use up?" — high-weight text entry
+        case mealCount      // Cuisine preferences — medium weight
+        case pantry         // Review/edit pantry items from last time
         case swiping        // Tinder-style recipe cards
-        case summary        // Weekly summary
+        case summary        // Weekly summary + B/L/D assignment
         case done           // Planning complete — show main tabs
     }
 
     // MARK: - State
     var step: Step
 
-    // Name step
-    var draftName: String = ""
+    // Step 2: key ingredients (highest match weight)
+    var keyIngredients: [String] = []
 
-    // Pantry step
+    // Step 3: cuisine preferences (medium match weight)
+    var selectedCuisines: Set<String> = []
+
+    // Step 4: pantry items to factor into base score
     var selectedPantryNames: Set<String> = []
 
-    // Meal count step
-    var targetBreakfast: Int = 1
-    var targetLunch: Int = 2
-    var targetDinner: Int = 2
+    // Meal count target (default; user can exceed in summary)
+    var targetMealCount: Int = 7
 
     // Swipe step
     var acceptedRecipes: [Recipe] = []
     var declinedIDs: Set<PersistentIdentifier> = []
 
     // MARK: - Computed
-    var targetTotal: Int { targetBreakfast + targetLunch + targetDinner }
-    var plateCount: Int  { acceptedRecipes.count }
-    var plateIsFull: Bool { plateCount >= targetTotal }
+    var acceptedCount: Int { acceptedRecipes.count }
 
     // MARK: - Init
     init(hasProfile: Bool, currentPantryItems: [PantryItem]) {
-        step = hasProfile ? .pantry : .name
+        // Skip name step for returning users; everyone goes through ingredients
+        step = hasProfile ? .ingredients : .name
         selectedPantryNames = Set(currentPantryItems.map { $0.name })
     }
 
     // MARK: - Actions
-    func accept(_ recipe: Recipe) { acceptedRecipes.append(recipe) }
-    func undoAccept() { if !acceptedRecipes.isEmpty { acceptedRecipes.removeLast() } }
-    func decline(_ recipe: Recipe) { declinedIDs.insert(recipe.persistentModelID) }
+    func accept(_ recipe: Recipe) {
+        guard !acceptedRecipes.contains(where: { $0.persistentModelID == recipe.persistentModelID }) else { return }
+        acceptedRecipes.append(recipe)
+    }
+
+    func removeAccepted(_ recipe: Recipe) {
+        acceptedRecipes.removeAll { $0.persistentModelID == recipe.persistentModelID }
+    }
+
+    func decline(_ recipe: Recipe) {
+        declinedIDs.insert(recipe.persistentModelID)
+    }
 }

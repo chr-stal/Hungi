@@ -48,10 +48,16 @@ struct RecipeCardView: View {
 
                 HStack(spacing: 8) {
                     PixelProgressBar(value: match.score, tint: matchColor)
-                        .frame(maxWidth: 120)
+                        .frame(maxWidth: 100)
                     Text("\(match.matchPercentage)% match")
                         .font(HungiTheme.caption)
                         .foregroundStyle(matchColor)
+                    Spacer()
+                    if match.recipe.rating > 0 {
+                        Text(match.recipe.ratingDisplay)
+                            .font(HungiTheme.caption.bold())
+                            .foregroundStyle(HungiTheme.harvest)
+                    }
                 }
             }
             .frame(maxWidth: .infinity, alignment: .leading)

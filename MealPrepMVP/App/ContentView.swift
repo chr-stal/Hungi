@@ -27,11 +27,8 @@ struct MainTabView: View {
             WeeklyOverviewView()
                 .tabItem { Label("Overview", systemImage: "calendar") }
 
-            PantryView()
-                .tabItem { Label("Pantry", systemImage: "refrigerator.fill") }
-
-            GroceryListView()
-                .tabItem { Label("Grocery", systemImage: "cart.fill") }
+            KitchenView()
+                .tabItem { Label("Kitchen", systemImage: "basket.fill") }
 
             RecipeListView()
                 .tabItem { Label("Recipes", systemImage: "book.fill") }
@@ -53,6 +50,7 @@ struct DevResetView: View {
     @Query private var plans: [WeeklyPlan]
     @Query private var pantryItems: [PantryItem]
     @Query private var groceryItems: [GroceryItem]
+    @Query private var allRecipes: [Recipe]
 
     @State private var showConfirm = false
     @State private var didReset = false
@@ -86,6 +84,8 @@ struct DevResetView: View {
                         DevStatRow(label: "Pantry Items", value: "\(pantryItems.count)")
                         Divider().background(HungiTheme.tan)
                         DevStatRow(label: "Grocery Items", value: "\(groceryItems.count)")
+                        Divider().background(HungiTheme.tan)
+                        DevStatRow(label: "Recipes", value: "\(allRecipes.count)")
                     }
                     .background(HungiTheme.cream)
                     .clipShape(RoundedRectangle(cornerRadius: HungiTheme.cardRadius))
@@ -117,7 +117,7 @@ struct DevResetView: View {
             Button("Reset", role: .destructive, action: reset)
             Button("Cancel", role: .cancel) { }
         } message: {
-            Text("This will delete your profile, weekly plans, pantry, and grocery list. Recipes are kept. The app will return to the name entry screen.")
+            Text("Deletes your profile, plans, pantry, grocery list, and recipes (recipes will be reseeded with cuisine tags). Returns to the name entry screen.")
         }
     }
 
@@ -126,7 +126,10 @@ struct DevResetView: View {
         plans.forEach        { modelContext.delete($0) }
         pantryItems.forEach  { modelContext.delete($0) }
         groceryItems.forEach { modelContext.delete($0) }
+        allRecipes.forEach   { modelContext.delete($0) }
         try? modelContext.save()
+        // Reseed recipes with cuisine data
+        seedRecipesIfNeeded(in: modelContext)
         didReset = true
     }
 }

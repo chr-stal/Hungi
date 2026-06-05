@@ -27,16 +27,17 @@ struct WeeklyPlanningFlow: View {
         switch coordinator.step {
         case .name:
             NameEntryStep()
-        case .pantry:
-            PantrySelectionStep()
+        case .ingredients:
+            IngredientsEntryStep()
         case .mealCount:
             MealCountStep()
+        case .pantry:
+            PantrySelectionStep()
         case .swiping:
             RecipeSwipeView()
         case .summary:
             WeeklySummaryView()
         case .done:
-            // Coordinator is done — parent ContentView will replace this with MainTabView
             Color.clear
         }
     }

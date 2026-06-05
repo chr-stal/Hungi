@@ -10,6 +10,8 @@ final class Recipe {
     // Metadata
     var cookTime: Int       // minutes; 0 = unset
     var mealType: String    // MealType constants
+    var cuisine: String     // CuisineType constants; "" = unset
+    var rating: Int         // 1-10 user rating; 0 = unrated
     var calories: Int       // kcal per serving; 0 = unset
     var protein: Int        // grams
     var carbs: Int          // grams
@@ -25,6 +27,8 @@ final class Recipe {
         instructions: String = "",
         cookTime: Int = 0,
         mealType: String = MealType.any,
+        cuisine: String = "",
+        rating: Int = 0,
         calories: Int = 0,
         protein: Int = 0,
         carbs: Int = 0,
@@ -34,12 +38,18 @@ final class Recipe {
         self.instructions = instructions
         self.cookTime = cookTime
         self.mealType = mealType
+        self.cuisine = cuisine
+        self.rating = rating
         self.calories = calories
         self.protein = protein
         self.carbs = carbs
         self.fat = fat
         self.createdAt = Date()
         self.ingredients = []
+    }
+
+    var ratingDisplay: String {
+        rating > 0 ? "★ \(rating)/10" : ""
     }
 
     var cookTimeDisplay: String {

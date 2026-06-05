@@ -12,6 +12,7 @@ struct AddEditRecipeView: View {
     @State private var name = ""
     @State private var instructions = ""
     @State private var mealType = MealType.any
+    @State private var cuisine = ""
     @State private var cookTime = ""
 
     // Macros
@@ -76,6 +77,13 @@ struct AddEditRecipeView: View {
                     Picker("Meal Type", selection: $mealType) {
                         ForEach(MealType.all, id: \.self) { t in
                             Label(MealType.displayName(for: t), systemImage: MealType.icon(for: t)).tag(t)
+                        }
+                    }
+                    .tint(HungiTheme.harvest)
+                    Picker("Cuisine", selection: $cuisine) {
+                        Text("Any").tag("")
+                        ForEach(CuisineType.names, id: \.self) { c in
+                            Text("\(CuisineType.emoji(for: c)) \(c)").tag(c)
                         }
                     }
                     .tint(HungiTheme.harvest)
@@ -163,6 +171,7 @@ struct AddEditRecipeView: View {
         name = r.name
         instructions = r.instructions
         mealType = r.mealType
+        cuisine = r.cuisine
         cookTime = r.cookTime > 0 ? "\(r.cookTime)" : ""
         calories = r.calories > 0 ? "\(r.calories)" : ""
         protein  = r.protein > 0  ? "\(r.protein)"  : ""
@@ -184,6 +193,7 @@ struct AddEditRecipeView: View {
         if let existing = recipe {
             existing.name = name; existing.instructions = instructions
             existing.mealType = mealType
+            existing.cuisine = cuisine
             existing.cookTime = Int(cookTime) ?? 0
             existing.calories = Int(calories) ?? 0
             existing.protein  = Int(protein)  ?? 0
@@ -195,7 +205,7 @@ struct AddEditRecipeView: View {
             target = existing
         } else {
             let r = Recipe(name: name, instructions: instructions,
-                           cookTime: Int(cookTime) ?? 0, mealType: mealType,
+                           cookTime: Int(cookTime) ?? 0, mealType: mealType, cuisine: cuisine,
                            calories: Int(calories) ?? 0, protein: Int(protein) ?? 0,
                            carbs: Int(carbs) ?? 0, fat: Int(fat) ?? 0)
             r.imageData = imageData

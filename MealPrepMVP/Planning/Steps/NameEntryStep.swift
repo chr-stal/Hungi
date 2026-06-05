@@ -10,6 +10,8 @@ struct NameEntryStep: View {
     var body: some View {
         ZStack {
             HungiTheme.parchment.ignoresSafeArea()
+            // Force light-mode appearance so text fields show dark text on iPhone
+            Color.clear.colorScheme(.light)
 
             VStack(spacing: 40) {
                 Spacer()
@@ -36,6 +38,8 @@ struct NameEntryStep: View {
 
                     TextField("e.g. Victoria", text: $name)
                         .font(HungiTheme.title2)
+                        .foregroundStyle(HungiTheme.darkBrown)
+                        .tint(HungiTheme.darkBrown)
                         .multilineTextAlignment(.center)
                         .padding(14)
                         .background(HungiTheme.cream)
@@ -71,6 +75,6 @@ struct NameEntryStep: View {
         guard !trimmed.isEmpty else { return }
         modelContext.insert(UserProfile(name: trimmed))
         try? modelContext.save()
-        coordinator.step = .pantry
+        coordinator.step = .ingredients
     }
 }

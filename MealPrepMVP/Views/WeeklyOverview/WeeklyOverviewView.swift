@@ -40,18 +40,8 @@ struct WeeklyOverviewView: View {
     @ViewBuilder
     private func planView(_ plan: WeeklyPlan) -> some View {
         List {
-            ForEach([MealType.breakfast, MealType.lunch, MealType.dinner, MealType.any], id: \.self) { type in
-                let meals = plan.meals.filter { $0.mealType == type }
-                if !meals.isEmpty {
-                    Section(MealType.displayName(for: type)) {
-                        ForEach(meals) { recipe in
-                            MealOverviewRow(recipe: recipe)
-                        }
-                    }
-                }
-            }
-
-            Section {
+            // Totals at the top
+            Section("Weekly Totals") {
                 HStack(spacing: 0) {
                     TotalCell(icon: "clock.fill", color: HungiTheme.woodBrown,
                               value: "\(plan.totalCookTime)", unit: "min", label: "Total time")
@@ -70,8 +60,18 @@ struct WeeklyOverviewView: View {
                                   value: "\(plan.totalFat)g", unit: "", label: "Fat")
                     }
                 }
-            } header: {
-                Text("Weekly Totals")
+            }
+
+            // Meals by type
+            ForEach([MealType.breakfast, MealType.lunch, MealType.dinner, MealType.any], id: \.self) { type in
+                let meals = plan.meals.filter { $0.mealType == type }
+                if !meals.isEmpty {
+                    Section(MealType.displayName(for: type)) {
+                        ForEach(meals) { recipe in
+                            MealOverviewRow(recipe: recipe)
+                        }
+                    }
+                }
             }
         }
         .scrollContentBackground(.hidden)

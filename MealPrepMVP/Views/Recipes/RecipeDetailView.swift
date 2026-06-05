@@ -2,7 +2,7 @@ import SwiftUI
 import SwiftData
 
 struct RecipeDetailView: View {
-    let recipe: Recipe
+    @Bindable var recipe: Recipe
     @State private var showingEdit = false
 
     var body: some View {
@@ -82,6 +82,42 @@ struct RecipeDetailView: View {
                         .listRowBackground(HungiTheme.cream)
                     }
                 }
+            }
+
+            // Rating section
+            Section("Your Rating") {
+                VStack(alignment: .leading, spacing: 10) {
+                    HStack {
+                        Text(recipe.rating > 0 ? "★ \(recipe.rating)/10" : "Not rated yet")
+                            .font(HungiTheme.headline)
+                            .foregroundStyle(recipe.rating > 0 ? HungiTheme.harvest : HungiTheme.woodBrown)
+                        Spacer()
+                        if recipe.rating > 0 {
+                            Button("Clear") { recipe.rating = 0 }
+                                .font(HungiTheme.caption)
+                                .foregroundStyle(HungiTheme.terracotta)
+                        }
+                    }
+                    // 1-10 tap buttons
+                    HStack(spacing: 6) {
+                        ForEach(1...10, id: \.self) { n in
+                            Button {
+                                recipe.rating = n
+                            } label: {
+                                Text("\(n)")
+                                    .font(HungiTheme.caption.bold())
+                                    .frame(width: 28, height: 28)
+                                    .background(recipe.rating == n ? HungiTheme.harvest : HungiTheme.tan)
+                                    .foregroundStyle(recipe.rating == n ? HungiTheme.cream : HungiTheme.darkBrown)
+                                    .clipShape(RoundedRectangle(cornerRadius: 5))
+                                    .overlay(RoundedRectangle(cornerRadius: 5)
+                                        .stroke(HungiTheme.darkBrown, lineWidth: recipe.rating == n ? 2 : 1))
+                            }
+                            .buttonStyle(.plain)
+                        }
+                    }
+                }
+                .listRowBackground(HungiTheme.cream)
             }
 
             if !recipe.instructions.isEmpty {

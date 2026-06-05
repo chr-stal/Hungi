@@ -86,9 +86,16 @@ struct RecipeRow: View {
                 Text(recipe.name)
                     .font(HungiTheme.headline)
                     .foregroundStyle(HungiTheme.darkBrown)
-                Text("\(recipe.ingredients.count) ingredient\(recipe.ingredients.count == 1 ? "" : "s")")
-                    .font(HungiTheme.caption)
-                    .foregroundStyle(HungiTheme.woodBrown)
+                HStack(spacing: 8) {
+                    Text("\(recipe.ingredients.count) ingredient\(recipe.ingredients.count == 1 ? "" : "s")")
+                        .font(HungiTheme.caption)
+                        .foregroundStyle(HungiTheme.woodBrown)
+                    if recipe.rating > 0 {
+                        Text(recipe.ratingDisplay)
+                            .font(HungiTheme.caption.bold())
+                            .foregroundStyle(HungiTheme.harvest)
+                    }
+                }
             }
         }
         .padding(.vertical, 4)

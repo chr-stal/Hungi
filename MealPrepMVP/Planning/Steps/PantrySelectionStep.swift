@@ -94,11 +94,12 @@ struct PantrySelectionStep: View {
                 VStack(alignment: .leading, spacing: 24) {
                     // Greeting
                     VStack(alignment: .leading, spacing: 4) {
-                        Text("Hello \(firstName)! 👋")
+                        Text("Anything else in stock? 🥦")
                             .font(.largeTitle.bold())
-                        Text("Let's plan your meals for this week. What do you have in your fridge?")
+                            .foregroundStyle(HungiTheme.darkBrown)
+                        Text("Here's what you had last time. Add or remove anything — these items support your ingredient matches.")
                             .font(.body)
-                            .foregroundStyle(.secondary)
+                            .foregroundStyle(HungiTheme.woodBrown)
                     }
                     .padding(.horizontal)
                     .padding(.top, 8)
@@ -106,6 +107,8 @@ struct PantrySelectionStep: View {
                     // Custom item add row
                     HStack {
                         TextField("Add a custom ingredient...", text: $customName)
+                            .foregroundStyle(HungiTheme.darkBrown)
+                            .tint(HungiTheme.darkBrown)
                             .padding(10)
                             .background(.quaternary, in: RoundedRectangle(cornerRadius: 10))
                             .submitLabel(.done)
@@ -138,14 +141,19 @@ struct PantrySelectionStep: View {
                 .padding(.bottom, 100)
             }
             .searchable(text: $searchText, prompt: "Search ingredients")
-            .navigationTitle("What's in your fridge?")
+            .navigationTitle("Also in your kitchen?")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Button("← Back") { coordinator.step = .mealCount }
+                        .font(HungiTheme.caption)
+                        .foregroundStyle(HungiTheme.wheat)
+                }
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button(action: confirm) {
                         Text(coordinator.selectedPantryNames.isEmpty
                              ? "Skip"
-                             : "Next (\(coordinator.selectedPantryNames.count))")
+                             : "Let's go (\(coordinator.selectedPantryNames.count))")
                         .bold()
                         .foregroundStyle(.orange)
                     }
@@ -175,7 +183,7 @@ struct PantrySelectionStep: View {
         existing.forEach { modelContext.delete($0) }
         coordinator.selectedPantryNames.forEach { modelContext.insert(PantryItem(name: $0)) }
         try? modelContext.save()
-        coordinator.step = .mealCount
+        coordinator.step = .swiping
     }
 }
 

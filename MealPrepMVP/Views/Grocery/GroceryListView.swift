@@ -87,6 +87,13 @@ struct GroceryListView: View {
             .background(HungiTheme.parchment)
             .navigationTitle("Grocery List")
             .toolbar {
+                if !items.isEmpty {
+                    ToolbarItem(placement: .navigationBarLeading) {
+                        Button("All → Pantry") { items.forEach { sendToPantry($0) } }
+                            .font(HungiTheme.caption.bold())
+                            .foregroundStyle(HungiTheme.harvest)
+                    }
+                }
                 if !checked.isEmpty {
                     ToolbarItem(placement: .navigationBarTrailing) {
                         Button("Clear checked") { checked.forEach { modelContext.delete($0) } }
